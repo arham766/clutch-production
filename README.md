@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="clutch-white-logo.svg" alt="Clutch logo" width="120" />
+<img src="assets/clutch-white-logo.svg" alt="Clutch logo" width="120" />
 
 # Clutch
 

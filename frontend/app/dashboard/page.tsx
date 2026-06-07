@@ -661,16 +661,12 @@ function EmbedBlock({ embedKey }: { embedKey: string }) {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
-        setOrigin(window.location.origin);
-      } else {
-        setOrigin("https://cdn.clutch.ai");
-      }
+      setOrigin(window.location.origin);
     }
   }, []);
 
   const snippet = embedKey 
-    ? `<script src="${origin}/widget.js" data-clutch-key="${embedKey}"></script>` 
+    ? `<script src="${origin}/widget.js" data-clutch-key="${embedKey}" data-api-url="${process.env.NEXT_PUBLIC_API_URL || 'https://clutch-production-backend.onrender.com/api'}"></script>` 
     : `<!-- Add a product first to generate your widget snippet -->`;
 
   const copy = async () => {

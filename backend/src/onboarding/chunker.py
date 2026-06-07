@@ -57,7 +57,7 @@ def chunk_result(
     chunks: list[dict[str, Any]] = []
     current_heading = ""
 
-    for seg in segments:
+    for seg_idx, seg in enumerate(segments):
         content = seg.get("embed") or seg.get("content") or seg.get("markdown") or seg.get("text") or ""
         if not content.strip():
             logger.warning("Empty content in segment. Keys: %s", list(seg.keys()))
@@ -77,7 +77,8 @@ def chunk_result(
         text_chunks = _split_text(text, MAX_CHUNK_SIZE, CHUNK_OVERLAP)
 
         for i, chunk_text in enumerate(text_chunks):
-            chunk_id = _make_id(source, section, page, i)
+            # Use seg_idx and i to ensure unique deterministic IDs for every chunk
+            chunk_id = _make_id(source, section, page, f"{seg_idx}_{i}")
 
             metadata: dict[str, str] = {
                 **base_meta,
@@ -126,7 +127,7 @@ def _split_text(text: str, max_size: int, overlap: int) -> list[str]:
     return [p for p in parts if p]
 
 
-def _make_id(source: str, section: str, page: str, index: int) -> str:
+def _make_id(source: str, section: str, page: str, index: str | int) -> str:
     """Generate a deterministic chunk ID."""
     raw = f"{source}:{section}:{page}:{index}"
     return hashlib.sha256(raw.encode()).hexdigest()[:16]

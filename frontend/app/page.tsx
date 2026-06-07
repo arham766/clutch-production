@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ChatScene } from "./ChatScene";
 
 export default function Home() {
@@ -43,9 +44,9 @@ export default function Home() {
             Clutch is built to see the device, follow your manuals, and turn
             every repair into a better answer for the next customer.
           </p>
-          <button
-            type="button"
-            className="fade-rise mt-6 rounded-xl bg-white px-5 py-2 text-sm font-semibold transition-transform duration-200 hover:scale-[1.06] active:scale-95"
+          <Link
+            href="/dashboard"
+            className="fade-rise mt-6 rounded-xl bg-white px-5 py-2 text-sm font-semibold transition-transform duration-200 hover:scale-[1.06] active:scale-95 inline-block"
             style={{
               color: "#5E8EBE",
               letterSpacing: "-0.02em",
@@ -53,7 +54,7 @@ export default function Home() {
             }}
           >
             Get started
-          </button>
+          </Link>
           <ChatScene />
         </div>
       </div>

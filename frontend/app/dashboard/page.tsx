@@ -56,7 +56,7 @@ export default function Dashboard() {
 
   // Real-time polling: refresh every 3s when any product is still processing
   useEffect(() => {
-    const activeStates = ["uploading", "parsing", "indexing", "uploaded", "draft"];
+    const activeStates = ["uploading", "parsing", "indexing", "uploaded"];
     const hasActive = products.some(p => activeStates.includes(p.status || ""));
     if (!hasActive || !user) return;
     const interval = setInterval(() => {
@@ -407,6 +407,13 @@ function ProductList({
             onEdit={() => onEdit(p.id)}
             onDelete={() => onDelete(p.id)}
             onDebug={() => onDebug(p)}
+            onTest={() => {
+              if (p.status === "ready") {
+                window.location.href = `/test/${embedKey}?product_id=${p.id}`;
+              } else {
+                alert("Product must be 'ready' to test.");
+              }
+            }}
           />
         ))}
       </ul>
@@ -490,11 +497,13 @@ function ProductCard({
   onEdit,
   onDelete,
   onDebug,
+  onTest,
 }: {
   product: Product;
   onEdit: () => void;
   onDelete: () => void;
   onDebug: () => void;
+  onTest: () => void;
 }) {
   return (
     <li className="flex flex-col gap-4 rounded-2xl bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
@@ -553,10 +562,18 @@ function ProductCard({
         <button
           type="button"
           onClick={onDebug}
-          className="flex-[2] rounded-lg px-3 py-2 text-sm font-semibold transition-colors hover:bg-slate-50"
+          className="flex-1 rounded-lg px-3 py-2 text-sm font-semibold transition-colors hover:bg-slate-50"
           style={{ border: `1.5px solid ${SOFT}`, color: "#283593", letterSpacing: "-0.02em" }}
         >
           View Outputs
+        </button>
+        <button
+          type="button"
+          onClick={onTest}
+          className="flex-1 rounded-lg px-3 py-2 text-sm font-semibold transition-colors hover:bg-green-50"
+          style={{ border: `1.5px solid ${SOFT}`, color: "#2E7D32", letterSpacing: "-0.02em" }}
+        >
+          Test Widget
         </button>
         <button
           type="button"

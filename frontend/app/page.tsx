@@ -1,10 +1,9 @@
 import Image from "next/image";
-import Link from "next/link";
 import { ChatScene } from "./ChatScene";
 
 export default function Home() {
   return (
-    <section className="relative h-dvh w-full bg-white px-[2vmin] pt-[2vmin] pb-36">
+    <section className="relative h-dvh w-full bg-white px-[2vmin] pt-[2vmin] pb-24">
       <div
         className="relative h-full w-full overflow-hidden rounded-[40px]"
         style={{
@@ -44,9 +43,9 @@ export default function Home() {
             Clutch is built to see the device, follow your manuals, and turn
             every repair into a better answer for the next customer.
           </p>
-          <Link
-            href="/dashboard"
-            className="fade-rise mt-6 inline-block rounded-xl bg-white px-5 py-2 text-sm font-semibold transition-transform duration-200 hover:scale-[1.06] active:scale-95"
+          <button
+            type="button"
+            className="fade-rise mt-6 rounded-xl bg-white px-5 py-2 text-sm font-semibold transition-transform duration-200 hover:scale-[1.06] active:scale-95"
             style={{
               color: "#5E8EBE",
               letterSpacing: "-0.02em",
@@ -54,13 +53,13 @@ export default function Home() {
             }}
           >
             Get started
-          </Link>
+          </button>
           <ChatScene />
         </div>
       </div>
 
       {/* Bottom white strip: built with love using ... */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-36 flex-col items-center justify-center gap-3">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-24 flex-col items-center justify-center gap-2">
         <p
           className="text-sm font-semibold"
           style={{ color: "#7A8BA0", letterSpacing: "-0.02em" }}

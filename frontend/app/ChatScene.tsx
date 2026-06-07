@@ -7,16 +7,17 @@ import { TiltedCard } from "./TiltedCard";
 type Msg = { sender: "user" | "ai"; text: string };
 
 const SCRIPT: Msg[] = [
-  { sender: "user", text: "My printer isn't feeding paper from the bottom tray." },
+  { sender: "user", text: "My DJI Mic Mini won't pair with the receiver." },
   {
     sender: "ai",
-    text: "Got it. Can you share the model number and confirm the tray latches all the way shut?",
+    text: "Your transmitter is blinking white but the receiver isn't in pairing mode. Hold the receiver pair button for 3 seconds.",
   },
-  { sender: "user", text: "HP LaserJet Pro M404n. Latch clicks but paper still won't pull." },
+  { sender: "user", text: "Still won't pair after that." },
   {
     sender: "ai",
-    text: "Likely the separation pad is worn. I'll walk you through replacing it. Takes about 5 minutes.",
+    text: "Firmware versions don't match. Update both through DJI Mimo. Takes about 3 minutes.",
   },
+  { sender: "user", text: "Worked. Thanks!" },
 ];
 
 const START_DELAY = 2900;
@@ -379,10 +380,10 @@ export function ChatScene() {
         >
           <div className="space-y-1.5 text-[13px] leading-snug">
             {[
-              ["Issue", "Blinking red light"],
-              ["Cause", "Tank sensor not pressed down"],
-              ["Saved fix", "Push back-right corner until it clicks"],
-              ["Next answer", "Starts with this step"],
+              ["Issue", "Won't pair with receiver"],
+              ["Cause", "Firmware versions don't match"],
+              ["Saved fix", "Update both via DJI Mimo"],
+              ["Next answer", "Run firmware check first"],
             ].map(([label, value]) => (
               <div key={label}>
                 <p
@@ -407,6 +408,28 @@ export function ChatScene() {
         >
           Repair Memory Updated
         </p>
+      </div>
+
+      {/* Chat / Voice mode toggle (above chat card) */}
+      <div
+        className="mb-4 flex rounded-full p-1 backdrop-blur"
+        style={{ backgroundColor: "rgba(255,255,255,0.18)" }}
+      >
+        {(["chat", "voice"] as const).map((m: "chat" | "voice") => (
+          <button
+            key={m}
+            type="button"
+            onClick={() => setMode(m)}
+            className="rounded-full px-5 py-1.5 text-sm font-semibold transition-colors"
+            style={{
+              backgroundColor: mode === m ? "white" : "transparent",
+              color: mode === m ? "#5E8EBE" : "rgba(255,255,255,0.85)",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            {m === "chat" ? "Chat" : "Voice"}
+          </button>
+        ))}
       </div>
 
       <TiltedCard
@@ -608,28 +631,6 @@ export function ChatScene() {
           </>
         )}
       </TiltedCard>
-
-      {/* Chat / Voice mode toggle */}
-      <div
-        className="mt-5 flex rounded-full p-1 backdrop-blur"
-        style={{ backgroundColor: "rgba(255,255,255,0.18)" }}
-      >
-        {(["chat", "voice"] as const).map((m: "chat" | "voice") => (
-          <button
-            key={m}
-            type="button"
-            onClick={() => setMode(m)}
-            className="rounded-full px-5 py-1.5 text-sm font-semibold transition-colors"
-            style={{
-              backgroundColor: mode === m ? "white" : "transparent",
-              color: mode === m ? "#5E8EBE" : "rgba(255,255,255,0.85)",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            {m === "chat" ? "Chat" : "Voice"}
-          </button>
-        ))}
-      </div>
     </div>
   );
 }
@@ -655,7 +656,7 @@ function VoiceMode({
 
   return (
     <div
-      className="flex flex-1 flex-col items-center justify-center px-8 pb-10"
+      className="flex flex-1 flex-col items-center justify-center px-6 pb-8"
       style={{ transform: "translateZ(55px)", transformStyle: "preserve-3d" }}
     >
       <div className="orb-float" style={{ width: 160, height: 160 }}>
@@ -667,7 +668,7 @@ function VoiceMode({
           manualOutput={agentState === "talking" ? 0.7 : 0.05}
         />
       </div>
-      <div className="mt-8 min-h-[3em] w-full max-w-[240px] px-2 text-center">
+      <div className="mt-7 min-h-[3em] w-full max-w-[240px] px-2 text-center">
         {aiText ? (
           <p
             className="text-[0.75rem] font-medium italic leading-[1.3] [text-wrap:pretty]"

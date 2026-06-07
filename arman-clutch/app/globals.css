@@ -1,0 +1,224 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Open Runde";
+  src: url("/fonts/OpenRunde-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Open Runde";
+  src: url("/fonts/OpenRunde-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Open Runde";
+  src: url("/fonts/OpenRunde-Semibold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Open Runde";
+  src: url("/fonts/OpenRunde-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Open Runde", ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Open Runde", ui-sans-serif, system-ui, sans-serif;
+}
+
+.hardware-wipe {
+  display: inline-block;
+  position: relative;
+  color: transparent;
+  padding-right: 0.18em;
+  margin-right: -0.18em;
+
+  background-image:
+    linear-gradient(
+      90deg,
+      #ffffff 0,
+      #ffffff 33.33%,
+      #c679c4 40%,
+      #fa3d1d 45%,
+      #ffb005 50%,
+      #e1e1fe 55%,
+      #0358f7 60%,
+      #5E8EBE 66.67%,
+      transparent 80%
+    ),
+    linear-gradient(#ffffff, #ffffff);
+  background-size: 200% 100%, 100% 100%;
+  background-position: 100% 0, 0 0;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  -webkit-mask-image: linear-gradient(to right, #000 50%, transparent 50%);
+  mask-image: linear-gradient(to right, #000 50%, transparent 50%);
+  -webkit-mask-size: 200% 100%;
+  mask-size: 200% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+
+  animation: hardware-wipe-anim 1.2s cubic-bezier(0.65, 0, 0.35, 1) 0.35s forwards;
+}
+
+.fade-rise {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: fade-rise-anim 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fade-rise-anim {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.msg-pop {
+  animation: msg-pop-anim 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: 50% 100%;
+}
+
+@keyframes msg-pop-anim {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.send-btn {
+  animation: send-pulse-anim 0.35s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes send-pulse-anim {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(0.82); }
+  100% { transform: scale(1); }
+}
+
+.dotted-wipe {
+  clip-path: inset(0 100% 0 0);
+  animation: dotted-wipe-anim 1.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes dotted-wipe-anim {
+  to {
+    clip-path: inset(0 0% 0 0);
+  }
+}
+
+.doc-page {
+  transform: rotate(var(--doc-rotate, 0deg));
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.group:hover .doc-page {
+  transform: translate(var(--doc-shift-x, 0), var(--doc-shift-y, 0))
+    rotate(var(--doc-rotate-hover, var(--doc-rotate, 0deg)))
+    scale(1.05);
+}
+
+.orb-float {
+  animation: orb-float-anim 4s ease-in-out infinite;
+}
+
+@keyframes orb-float-anim {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.voice-orb-large {
+  width: 168px;
+  height: 168px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 26%, #ffffff 0%, #B1C8E0 28%, #6291C0 62%, #3B6793 100%);
+  box-shadow:
+    0 18px 48px rgba(94, 142, 190, 0.45),
+    inset 0 -20px 40px rgba(59, 103, 147, 0.45);
+  animation: voice-orb-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes voice-orb-pulse {
+  0%, 100% { transform: scale(0.94); }
+  50% { transform: scale(1.06); }
+}
+
+.chart-draw {
+  stroke-dasharray: 360;
+  stroke-dashoffset: 360;
+  animation: chart-draw-anim 1.4s cubic-bezier(0.65, 0, 0.35, 1) 0.25s forwards;
+}
+
+@keyframes chart-draw-anim {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.march-dots {
+  animation: march-dots-anim 1.4s linear infinite;
+}
+
+@keyframes march-dots-anim {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+.typing-caret {
+  display: inline-block;
+  margin-left: 1px;
+  animation: caret-blink 1s steps(1) infinite;
+  color: #32485D;
+}
+
+@keyframes caret-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes hardware-wipe-anim {
+  0% {
+    background-position: 100% 0, 0 0;
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+  75% {
+    -webkit-mask-position: 0% 0;
+    mask-position: 0% 0;
+  }
+  100% {
+    background-position: -120% 0, 0 0;
+    -webkit-mask-position: 0% 0;
+    mask-position: 0% 0;
+  }
+}

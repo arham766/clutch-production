@@ -1,0 +1,25 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Secrets — never commit (committed template is .env.example)
+.env
+.env.local
+.env.*.local
+*AccessToken*.txt
+*.token
+
+# Local camera captures (may contain personal frames)
+camera_snapshot.jpg
+camera_live.jpg
+
+
+# runtime cross-call memory (per-user summaries)
+data/memory/

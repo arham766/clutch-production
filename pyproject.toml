@@ -1,0 +1,36 @@
+[project]
+name = "yc-hackathon"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "imagehash>=4.3.2",
+    "openai>=2.41.0",
+    "opencv-python-headless>=4.13.0.92",
+    "pillow>=12.2.0",
+    "python-dotenv>=1.2.2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+    "pytest-asyncio>=1.4.0",
+]
+# Optional, per-Limb. Base install (mock/selection paths) needs none of these.
+retrieval = [
+    "moss>=1.1.1",     # real Moss read path (lazy-imported; mock path is pure-python)
+    "numpy>=1.26",     # local-cosine fallback math over many vectors
+]
+voice = [
+    "livekit-agents>=1.0",
+    "livekit-plugins-silero>=1.0",         # VAD / endpointing (realtime)
+    "livekit-plugins-cartesia>=1.0",       # STT + TTS plugins (realtime + speech)
+    "livekit-plugins-turn-detector>=1.0",  # optional: better turn detection
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+pythonpath = ["src"]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

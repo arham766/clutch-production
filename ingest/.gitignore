@@ -1,0 +1,14 @@
+# secrets — never commit
+.env
+.env.local
+.kb_key.b64
+*.key
+
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# ingestion artifacts
+debug/

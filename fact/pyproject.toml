@@ -1,0 +1,26 @@
+[project]
+name = "fact-protocol"
+version = "0.2.0"
+description = "FACT — Facts, Attested, Chained, Transferable. Reference implementation of the FACT v0.2 protocol library (Part A)."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "cryptography>=42.0.0",
+    "rfc8785>=0.1.2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["fact"]

@@ -1,0 +1,508 @@
+type: provider-account/openrouter
+integrations:
+  - cost:
+      metric: public_cost
+    name: deepseek-deepseek-r1-distill-qwen-32b
+    type: integration/model/openrouter
+    model_id: deepseek/deepseek-r1-distill-qwen-32b
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: deepseek-r1-distill-qwen-32b
+    type: integration/model/openrouter
+    model_id: deepseek-r1-distill-qwen-32b
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-coder-next
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-coder-next
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-coder-flash
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-coder-flash
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-2.5-72b-instruct
+    type: integration/model/openrouter
+    model_id: qwen-2.5-72b-instruct
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-2.5-7b-instruct
+    type: integration/model/openrouter
+    model_id: qwen-2.5-7b-instruct
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-2.5-coder-32b-instruct
+    type: integration/model/openrouter
+    model_id: qwen-2.5-coder-32b-instruct
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-plus
+    type: integration/model/openrouter
+    model_id: qwen-plus
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen-2.5-72b-instruct
+    type: integration/model/openrouter
+    model_id: qwen/qwen-2.5-72b-instruct
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen-2.5-7b-instruct
+    type: integration/model/openrouter
+    model_id: qwen/qwen-2.5-7b-instruct
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen-2.5-coder-32b-instruct
+    type: integration/model/openrouter
+    model_id: qwen/qwen-2.5-coder-32b-instruct
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen-plus
+    type: integration/model/openrouter
+    model_id: qwen/qwen-plus
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen-plus-2025-07-28
+    type: integration/model/openrouter
+    model_id: qwen/qwen-plus-2025-07-28
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen-plus-2025-07-28-thinking
+    type: integration/model/openrouter
+    model_id: qwen/qwen-plus-2025-07-28:thinking
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen2.5-vl-72b-instruct
+    type: integration/model/openrouter
+    model_id: qwen/qwen2.5-vl-72b-instruct
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-14b
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-14b
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-235b-a22b
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-235b-a22b
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-235b-a22b-2507
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-235b-a22b-2507
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-235b-a22b-thinking-2507
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-235b-a22b-thinking-2507
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-30b-a3b
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-30b-a3b
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-30b-a3b-instruct-2507
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-30b-a3b-instruct-2507
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-30b-a3b-thinking-2507
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-30b-a3b-thinking-2507
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-32b
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-32b
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-8b
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-8b
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-coder
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-coder
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-coder-30b-a3b-instruct
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-coder-30b-a3b-instruct
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-coder-plus
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-coder-plus
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen3-14b
+    type: integration/model/openrouter
+    model_id: qwen3-14b
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-coder-exacto
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-coder:exacto
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-max
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-max
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-max-thinking
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-max-thinking
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-next-80b-a3b-instruct
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-next-80b-a3b-instruct
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-next-80b-a3b-thinking
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-next-80b-a3b-thinking
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-vl-235b-a22b-instruct
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-vl-235b-a22b-instruct
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-vl-235b-a22b-thinking
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-vl-235b-a22b-thinking
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-vl-30b-a3b-instruct
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-vl-30b-a3b-instruct
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-vl-30b-a3b-thinking
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-vl-30b-a3b-thinking
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-vl-32b-instruct
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-vl-32b-instruct
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-vl-8b-instruct
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-vl-8b-instruct
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3-vl-8b-thinking
+    type: integration/model/openrouter
+    model_id: qwen/qwen3-vl-8b-thinking
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3.5-122b-a10b
+    type: integration/model/openrouter
+    model_id: qwen/qwen3.5-122b-a10b
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3.5-27b
+    type: integration/model/openrouter
+    model_id: qwen/qwen3.5-27b
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3.5-35b-a3b
+    type: integration/model/openrouter
+    model_id: qwen/qwen3.5-35b-a3b
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3.5-9b
+    type: integration/model/openrouter
+    model_id: qwen/qwen3.5-9b
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3.5-flash-02-23
+    type: integration/model/openrouter
+    model_id: qwen/qwen3.5-flash-02-23
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3.5-plus-02-15
+    type: integration/model/openrouter
+    model_id: qwen/qwen3.5-plus-02-15
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3.5-plus-20260420
+    type: integration/model/openrouter
+    model_id: qwen/qwen3.5-plus-20260420
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3.6-27b
+    type: integration/model/openrouter
+    model_id: qwen/qwen3.6-27b
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3.6-35b-a3b
+    type: integration/model/openrouter
+    model_id: qwen/qwen3.6-35b-a3b
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3.6-flash
+    type: integration/model/openrouter
+    model_id: qwen/qwen3.6-flash
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3.6-max-preview
+    type: integration/model/openrouter
+    model_id: qwen/qwen3.6-max-preview
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3.6-plus
+    type: integration/model/openrouter
+    model_id: qwen/qwen3.6-plus
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3.7-max
+    type: integration/model/openrouter
+    model_id: qwen/qwen3.7-max
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen-qwen3.7-plus
+    type: integration/model/openrouter
+    model_id: qwen/qwen3.7-plus
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen2.5-vl-72b-instruct
+    type: integration/model/openrouter
+    model_id: qwen2.5-vl-72b-instruct
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen3-235b-a22b
+    type: integration/model/openrouter
+    model_id: qwen3-235b-a22b
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen3-235b-a22b-2507
+    type: integration/model/openrouter
+    model_id: qwen3-235b-a22b-2507
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen3-235b-a22b-thinking-2507
+    type: integration/model/openrouter
+    model_id: qwen3-235b-a22b-thinking-2507
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen3-30b-a3b
+    type: integration/model/openrouter
+    model_id: qwen3-30b-a3b
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen3-30b-a3b-instruct-2507
+    type: integration/model/openrouter
+    model_id: qwen3-30b-a3b-instruct-2507
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen3-32b
+    type: integration/model/openrouter
+    model_id: qwen3-32b
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen3-8b
+    type: integration/model/openrouter
+    model_id: qwen3-8b
+    model_types:
+      - chat
+  - cost:
+      metric: public_cost
+    name: qwen3-coder
+    type: integration/model/openrouter
+    model_id: qwen3-coder
+    model_types:
+      - chat
+  - type: integration/model/openrouter
+    name: minimax-m1
+    model_id: minimax-m1
+    model_types:
+      - chat
+    cost:
+      metric: public_cost
+  - type: integration/model/openrouter
+    name: minimax-minimax-m1
+    model_id: minimax/minimax-m1
+    model_types:
+      - chat
+    cost:
+      metric: public_cost
+  - type: integration/model/openrouter
+    name: minimax-minimax-m2
+    model_id: minimax/minimax-m2
+    model_types:
+      - chat
+    cost:
+      metric: public_cost
+  - type: integration/model/openrouter
+    name: minimax-minimax-m2-her
+    model_id: minimax/minimax-m2-her
+    model_types:
+      - chat
+    cost:
+      metric: public_cost
+  - type: integration/model/openrouter
+    name: minimax-minimax-m2.1
+    model_id: minimax/minimax-m2.1
+    model_types:
+      - chat
+    cost:
+      metric: public_cost
+  - type: integration/model/openrouter
+    name: minimax-minimax-m2.5
+    model_id: minimax/minimax-m2.5
+    model_types:
+      - chat
+    cost:
+      metric: public_cost
+  - type: integration/model/openrouter
+    name: minimax-minimax-m2.7
+    model_id: minimax/minimax-m2.7
+    model_types:
+      - chat
+    cost:
+      metric: public_cost
+  - type: integration/model/openrouter
+    name: minimax-minimax-m3
+    model_id: minimax/minimax-m3
+    model_types:
+      - chat
+    cost:
+      metric: public_cost
+name: openrouter
+auth_data:
+  api_key: ${OPENROUTER_API_KEY}
+  type: api-key
+collaborators:
+  - role_id: provider-account-manager
+    subject: user:atofarqueislam645@gmail.com
+  - role_id: provider-account-access
+    subject: team:everyone

@@ -190,6 +190,10 @@ class GatewayClient:
             The full API response dict.
         """
         model = route(task)
+        # OpenRouter does not expect 'openrouter/' prefix in the model ID.
+        if "openrouter.ai" in self.base_url and model.startswith("openrouter/"):
+            model = model.replace("openrouter/", "", 1)
+            
         payload = {
             "model": model,
             "messages": messages,
@@ -221,7 +225,13 @@ class GatewayClient:
             logger.warning("Gateway fully down — falling back to direct provider")
             self._using_fallback = True
             try:
-                resp = self._fallback_client.post("/v1/chat/completions", json=payload)
+                fallback_model = route(task)
+                # If fallback is OpenRouter, strip prefix. If TrueFoundry, keep it.
+                if "openrouter.ai" in str(self._fallback_client.base_url) and fallback_model.startswith("openrouter/"):
+                    fallback_model = fallback_model.replace("openrouter/", "", 1)
+                
+                fallback_payload = {**payload, "model": fallback_model}
+                resp = self._fallback_client.post("/v1/chat/completions", json=fallback_payload)
                 resp.raise_for_status()
                 result = resp.json()
 
@@ -301,6 +311,13 @@ def init_gateway(cfg: Config) -> GatewayClient:
         "Gateway initialised: %s",
         {k: v for k, v in _ROUTE_TABLE.items()},
     )
+    if cfg.openrouter_api_key:
+        return GatewayClient(
+            base_url=cfg.openrouter_base_url,
+            api_key=cfg.openrouter_api_key,
+            fallback_base_url=cfg.tf_base_url,
+            fallback_api_key=cfg.tf_api_key,
+        )
     return GatewayClient(base_url=cfg.tf_base_url, api_key=cfg.tf_api_key)
 
 

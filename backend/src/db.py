@@ -127,10 +127,11 @@ def get_company_by_api_key(api_key: str) -> dict[str, Any] | None:
 
     Used by the widget bootstrap (``/connection-details``).
     """
+    from google.cloud.firestore_v1.base_query import FieldFilter
     db = _get_db()
     results = (
         db.collection("companies")
-        .where("api_key", "==", api_key)
+        .where(filter=FieldFilter("api_key", "==", api_key))
         .limit(1)
         .get()
     )

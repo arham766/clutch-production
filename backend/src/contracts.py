@@ -216,3 +216,4 @@ class SupportSession:
     product_id: str | None = None
     phase: str = "greeting"  # greeting | assisting | confirming | escalating | resolved
     history: list[dict[str, str]] = field(default_factory=list)
+    catalog: list[CatalogEntry] = field(default_factory=list)

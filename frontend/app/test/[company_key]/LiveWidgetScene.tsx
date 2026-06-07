@@ -9,7 +9,10 @@ import {
   useRoomContext,
   useVoiceAssistant,
   useLocalParticipant,
+  useTrackTranscription,
+  VideoTrack
 } from "@livekit/components-react";
+import { Track } from "livekit-client";
 
 type Msg = { sender: "user" | "ai"; text: string };
 
@@ -97,36 +100,7 @@ export function LiveWidgetScene({ companyKey, productId }: { companyKey: string,
 
   return (
     <div className="fade-rise relative mt-10 flex w-full max-w-[320px] flex-1 flex-col items-center">
-      
-      {/* Side video panel - mocked for demonstration of "See" feature */}
-      <div
-        className={`absolute right-full transition-all duration-700 ease-out translate-x-0 opacity-100`}
-        style={{ top: 0, marginRight: 160 }}
-      >
-        <div
-          className="overflow-hidden rounded-2xl bg-white transition-transform duration-300 ease-out hover:scale-[1.04]"
-          style={{
-            width: 300,
-            height: 180,
-            boxShadow: "0 14px 36px rgba(50,72,93,0.22)",
-          }}
-        >
-          <video
-            src="/test-vid.mov"
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="h-full w-full object-cover"
-          />
-        </div>
-        <p
-          className="mt-3 text-center text-lg font-semibold text-white"
-          style={{ letterSpacing: "-0.035em" }}
-        >
-          Live customer view
-        </p>
-      </div>
+
 
       {/* Mode toggle */}
       <div
@@ -298,9 +272,21 @@ export function LiveWidgetScene({ companyKey, productId }: { companyKey: string,
 function ActiveVoiceMode() {
   const { state, audioTrack } = useVoiceAssistant();
   const { localParticipant } = useLocalParticipant();
+  const { segments } = useTrackTranscription(audioTrack);
   
   // This is the FIX for the video/camera issue we diagnosed!
   // Force enable the camera track so the worker receives the video feed
+  const cameraTrack = localParticipant?.getTrackPublication(Track.Source.Camera);
+  const micTrack = localParticipant?.getTrackPublication(Track.Source.Microphone);
+
+  const micTrackRef = localParticipant ? {
+    participant: localParticipant,
+    source: Track.Source.Microphone,
+    publication: micTrack
+  } : undefined;
+
+  const { segments: userSegments } = useTrackTranscription(micTrackRef as any);
+
   useEffect(() => {
     if (localParticipant) {
       localParticipant.setCameraEnabled(true).catch(e => console.error("Failed to enable camera:", e));
@@ -312,28 +298,63 @@ function ActiveVoiceMode() {
   if ((state as string) === "speaking") agentState = "talking";
   else if ((state as string) === "thinking" || (state as string) === "responding") agentState = "thinking";
 
+  const latestUserSegment = userSegments.length > 0 ? userSegments[userSegments.length - 1].text : "";
+
   return (
-    <div
-      className="flex flex-1 flex-col items-center justify-center px-6 pb-8"
-      style={{ transform: "translateZ(55px)", transformStyle: "preserve-3d" }}
-    >
-      <div className="orb-float" style={{ width: 160, height: 160 }}>
-        <Orb
-          colors={["#CCE0EB", "#91BDDB"]}
-          agentState={agentState}
-          volumeMode="manual"
-          manualInput={agentState === "listening" ? 0.55 : 0.1}
-          manualOutput={agentState === "talking" ? 0.7 : 0.05}
-        />
-      </div>
-      <div className="mt-7 min-h-[3em] w-full max-w-[240px] px-2 text-center">
-        <p
-          className="text-[0.75rem] font-semibold leading-[1.25] [text-wrap:pretty]"
-          style={{ color: "#32485D", letterSpacing: "-0.02em" }}
+    <>
+      {/* Real-time webcam feed */}
+      <div
+        className="absolute right-full transition-all duration-700 ease-out translate-x-0 opacity-100"
+        style={{ top: 0, marginRight: 160 }}
+      >
+        <div
+          className="overflow-hidden rounded-2xl bg-black transition-transform duration-300 ease-out hover:scale-[1.04] flex items-center justify-center"
+          style={{ width: 300, height: 180, boxShadow: "0 14px 36px rgba(50,72,93,0.22)" }}
         >
-          {state === "speaking" ? "Clutch is speaking..." : state === "listening" ? "Listening..." : "Thinking..."}
+          {cameraTrack?.track ? (
+            <VideoTrack 
+              trackRef={{ participant: localParticipant!, source: Track.Source.Camera, publication: cameraTrack }} 
+              className="h-full w-full object-cover" 
+            />
+          ) : (
+            <span className="text-white text-sm font-semibold animate-pulse">Camera starting...</span>
+          )}
+        </div>
+        <p className="mt-3 text-center text-lg font-semibold text-white" style={{ letterSpacing: "-0.035em" }}>
+          Live customer view
         </p>
       </div>
-    </div>
+
+      <div
+        className="flex flex-1 flex-col items-center justify-center px-6 pb-8"
+        style={{ transform: "translateZ(55px)", transformStyle: "preserve-3d" }}
+      >
+        <div className="orb-float" style={{ width: 160, height: 160 }}>
+          <Orb
+            colors={["#CCE0EB", "#91BDDB"]}
+            agentState={agentState}
+            volumeMode="manual"
+            manualInput={agentState === "listening" ? 0.55 : 0.1}
+            manualOutput={agentState === "talking" ? 0.7 : 0.05}
+          />
+        </div>
+        
+        {/* User STT Transcript */}
+        <div className="mt-6 min-h-[2em] w-full max-w-[260px] px-2 text-center flex items-center justify-center">
+          <p className="text-[0.85rem] leading-[1.3] text-[#5E8EBE] italic [text-wrap:pretty]">
+            {latestUserSegment ? `"${latestUserSegment}"` : ""}
+          </p>
+        </div>
+
+        <div className="mt-2 min-h-[3em] w-full max-w-[240px] px-2 text-center">
+          <p
+            className="text-[0.75rem] font-semibold leading-[1.25] [text-wrap:pretty]"
+            style={{ color: "#32485D", letterSpacing: "-0.02em" }}
+          >
+            {state === "speaking" ? "Clutch is speaking..." : state === "listening" ? "Listening..." : "Thinking..."}
+          </p>
+        </div>
+      </div>
+    </>
   );
 }

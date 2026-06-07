@@ -48,6 +48,24 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             from src.app import build_app
             build_app(cfg)
             
+            # Wire up the realtime voice worker asynchronously so it doesn't block FastAPI
+            from src.app_livekit import build_clutch_worker
+            from src.gateway import init_gateway
+            from src.contracts import CatalogEntry
+            import asyncio
+            from livekit.agents.worker import AgentServer
+            
+            # Only start if LiveKit API key is present
+            if cfg.livekit_api_key:
+                gw = init_gateway(cfg)
+                demo_catalog = [CatalogEntry(product_id="lj-m404", name="LaserJet Pro M404", brand="HP")]
+                worker_opts = build_clutch_worker(cfg=cfg, gateway_client=gw, catalog=demo_catalog)
+                server = AgentServer.from_server_options(worker_opts)
+                asyncio.create_task(server.run())
+                logger.info("LiveKit realtime worker task started in background.")
+            else:
+                logger.warning("LiveKit API Key missing, not starting worker.")
+            
             logger.info("Config + Firebase + Runtime initialised from env.")
         except Exception as e:
             logger.exception("Could not auto-load config: %s", e)

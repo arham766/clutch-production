@@ -71,11 +71,16 @@ def invalidate_products_cache(company_id: str) -> None:
 # Routes
 # ---------------------------------------------------------------------------
 
+from fastapi import Response
+
 @router.get("", response_model=ProductListResponse)
 async def list_company_products(
+    response: Response,
     auth: AuthContext = Depends(get_auth),
 ) -> ProductListResponse:
     """List all products for the authenticated company."""
+    # We deliberately don't set Cache-Control here so the frontend can hit the fast in-memory cache instantly on upload
+    
     # Check cache
     cached = _PRODUCTS_CACHE.get(auth.company_id)
     if cached and (time.time() - cached["time"] < CACHE_TTL):

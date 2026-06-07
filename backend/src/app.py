@@ -197,12 +197,19 @@ def build_app(
             from livekit.api import AccessToken, VideoGrants  # type: ignore[import-untyped]
 
             def real_minter(company_id: str, modality: str) -> dict[str, str]:
-                room_name = f"clutch-{company_id}-{modality}"
+                import time, json
+                mod_map = {"text": "type", "voice": "talk", "video": "see"}
+                internal_modality = mod_map.get(modality, modality if modality in ("type", "talk", "see") else "type")
+                room_name = f"clutch-{company_id}-{int(time.time())}"
+                
                 token = AccessToken(
                     cfg.livekit_api_key,
                     cfg.livekit_api_secret,
                 )
-                token.with_identity(f"customer-{company_id}")
+                token.with_identity(f"customer-{company_id}-{int(time.time())}")
+                token.with_name("Customer")
+                token.with_metadata(json.dumps({"company_key": str(company_id), "modality": internal_modality}))
+                token.with_attributes({"company_key": str(company_id), "modality": internal_modality})
                 token.with_grants(
                     VideoGrants(
                         room_join=True,

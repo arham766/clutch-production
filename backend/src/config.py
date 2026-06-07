@@ -64,7 +64,21 @@ class Config:
     # -----------------------------------------------------------------------
     # Features (Optional, degrade gracefully)
     # -----------------------------------------------------------------------
+    openrouter_api_key: str | None = None
+    openrouter_base_url: str = "https://openrouter.ai/api"
     unsiloed_api_key: str | None = None
+
+    # -----------------------------------------------------------------------
+    # Realtime tuning (LLD 05-realtime §7) — matches Abdul's reference config
+    # -----------------------------------------------------------------------
+    see_fps: float = 1.5
+    see_batch: int = 2
+    see_min_interval_ms: int = 1500
+    endpoint_min_ms: int = 300
+    endpoint_max_ms: int = 2000
+    min_interruption_ms: int = 200         # Abdul's default — was 1000 in our code (too slow!)
+    barge_in: bool = True
+    latency_badge: bool = True
 
     # Which subsystems are running without credentials?
     degraded: tuple[str, ...] = field(default_factory=tuple)
@@ -120,6 +134,8 @@ def load_config(env_path: str | None = None) -> Config:
     # Load optional features
     unsiloed_key = os.getenv("UNSILOED_API_KEY")
     cfg_kwargs["unsiloed_api_key"] = unsiloed_key
+    cfg_kwargs["openrouter_api_key"] = os.getenv("OPENROUTER_API_KEY")
+    cfg_kwargs["openrouter_base_url"] = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api")
 
     degraded = []
     if not unsiloed_key:

@@ -154,42 +154,40 @@ def build_speech(cfg=None):
     return get_stt(cfg).stream(), get_tts(cfg).stream()
 
 
-def build_clutch_worker(cfg=None, gateway_client=None, *, catalog: Optional[list[CatalogEntry]] = None,
-                        company_resolver=None, scope_session=None, vad=None):
-    """Full composition root for the realtime worker (05): wires the REAL per-session agent (04) +
-    perception (02) + retrieval (03) + speech into a runnable WorkerOptions (→ realtime.run_worker /
-    cli.run_app). Needs the `voice` deps + LiveKit/Cartesia creds to actually run.
-
-    The agent is passed as a FACTORY: `run_session` builds one stateful ConversationAgent per room
-    from the scoped session (one room == one SupportSession)."""
-    from src.realtime import build_worker
-    retrieve_for, compose = build_retrieval(cfg, gateway_client)
-
-    # Low-latency raw token streaming for voice (no citation/safety gate). RACE: MiniMax (primary,
-    # high quality but slow to first token) vs a fast instruct fallback — if the primary hasn't
-    # produced a token within the deadline, switch to the fallback so first audio stays ~real-time.
+async def clutch_entrypoint(ctx):
+    """Top-level entrypoint for the worker child processes. This is pickleable."""
+    from src.config import load_config
+    from src.gateway import init_gateway
+    from src.contracts import CatalogEntry
+    from src.realtime.session import run_session
+    import os
+    import openai
+    from src.retrieval import gateway_compose_race
+    from src.gateway import route
+    from livekit.plugins import cartesia, silero
+    from src.speech import get_stt, get_tts
+    
+    cfg = load_config()
+    gw = init_gateway(cfg) if cfg.livekit_api_key else None
+    catalog = [CatalogEntry(product_id="lj-m404", name="LaserJet Pro M404", brand="HP")]
+    
+    retrieve_for, compose = build_retrieval(cfg, gw)
+    
     compose_stream = None
-    if gateway_client is not None:
-        import os as _os
-        from src.retrieval import gateway_compose_race
-        import openai
-        
+    if gw is not None:
         _primary = getattr(cfg, "reason_model", None) or "reason.compose"
         _fast = (getattr(cfg, "reason_fast_model", None)
-                 or _os.environ.get("REASON_FAST_MODEL") or "openrouter/qwen3-30b-a3b-instruct-2507")
+                 or os.environ.get("REASON_FAST_MODEL") or "openrouter/qwen3-30b-a3b-instruct-2507")
         _deadline = float(getattr(cfg, "reason_deadline_s", None)
-                          or _os.environ.get("REASON_DEADLINE_S", 2.0))
+                          or os.environ.get("REASON_DEADLINE_S", 2.0))
 
-        # We must use a real openai.AsyncOpenAI client for streaming because GatewayClient lacks chat.completions.create
         base_url = getattr(cfg, "openrouter_base_url", None) or getattr(cfg, "tf_base_url", None)
-        # Ensure it has /v1 for openai client
         if base_url and not base_url.endswith("/v1"):
             base_url = base_url.rstrip("/") + "/v1"
             
         api_key = getattr(cfg, "openrouter_api_key", None) or getattr(cfg, "tf_api_key", None)
         openai_client = openai.AsyncOpenAI(base_url=base_url, api_key=api_key)
 
-        from src.gateway import route
         try:
             _primary_model = route(_primary)
         except Exception:
@@ -205,35 +203,41 @@ def build_clutch_worker(cfg=None, gateway_client=None, *, catalog: Optional[list
         if base_url and "openrouter.ai" in base_url and _fast_model.startswith("openrouter/"):
             _fast_model = _fast_model.replace("openrouter/", "", 1)
 
-        def compose_stream(answer_query, chunks, history=None, summary=""):  # noqa: E306  async gen
+        def do_compose_stream(answer_query, chunks, history=None, summary=""):  # noqa: E306
             return gateway_compose_race(answer_query, chunks, client=openai_client,
                                         primary_model=_primary_model, fallback_model=_fast_model,
                                         primary_deadline=_deadline,
                                         history=history, summary=summary)
+        compose_stream = do_compose_stream
 
-    look = build_look(gateway_client, cfg=cfg)                         # See VQA (real if gw given)
-
-    def make_agent(session: SupportSession) -> ConversationAgent:      # per-session stateful brain
+    look = build_look(gw, cfg=cfg)
+    
+    def make_agent(session):
+        from src.agent.agent import ConversationAgent
         return ConversationAgent(session, retrieve_for, compose, compose_stream=compose_stream,
-                                 look=look,   # See: answer visual questions off the live frame
-                                 warm=True,   # background-warm Moss so the first turn isn't cold
+                                 look=look, warm=True,
                                  catalog=(getattr(session, "catalog", None) or catalog))
 
-    identify = build_identify(gateway_client, cfg=cfg)                 # S8 vision (real if gw given)
-    # Register the plugins on the MAIN THREAD here (importing the plugin module registers it; LiveKit
-    # forbids registration from a job-runner thread). The STT/TTS *instances* are still built per-job
-    # (factories below) inside run_session's loop, so Cartesia's aiohttp ws binds to the live loop
-    # (building instances pre-loop → "Session is closed"). Best of both: import-on-main, build-in-loop.
-    from livekit.plugins import cartesia, silero  # noqa: F401  (import = register on main thread)
-    from src.speech import get_stt, get_tts
-    stt = lambda: get_stt(cfg).stream()        # noqa: E731  (built per-job in the loop)
-    tts = lambda: get_tts(cfg).stream()        # noqa: E731
-    if vad is None:
-        vad = silero.VAD.load()                # stateless model — fine to load once (main thread)
-    scope = scope_session or make_scope_session(cfg, catalog=catalog, company_resolver=company_resolver)
-    return build_worker(agent=make_agent, identify=identify, stt=stt, tts=tts, vad=vad,
-                        scope_session=scope, cfg=cfg)
+    identify = build_identify(gw, cfg=cfg)
+    
+    stt = lambda: get_stt(cfg).stream()
+    tts = lambda: get_tts(cfg).stream()
+    vad = silero.VAD.load()
+    scope = make_scope_session(cfg, catalog=catalog)
+    
+    await run_session(ctx, agent=make_agent, identify=identify, stt=stt, tts=tts, vad=vad,
+                      scope_session=scope, cfg=cfg)
 
+
+def build_clutch_worker(cfg=None, gateway_client=None, *, catalog: Optional[list[CatalogEntry]] = None,
+                        company_resolver=None, scope_session=None, vad=None):
+    from livekit.agents import WorkerOptions
+    return WorkerOptions(
+        entrypoint_fnc=clutch_entrypoint,
+        ws_url=cfg.livekit_url,
+        api_key=cfg.livekit_api_key,
+        api_secret=cfg.livekit_api_secret,
+    )
 
 __all__ = ["build_retrieval", "build_agent", "build_identify",
            "make_scope_session", "build_speech", "build_clutch_worker"]

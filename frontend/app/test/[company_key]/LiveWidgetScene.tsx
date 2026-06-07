@@ -111,14 +111,7 @@ export function LiveWidgetScene({ companyKey, productId }: { companyKey: string,
             boxShadow: "0 14px 36px rgba(50,72,93,0.22)",
           }}
         >
-          <video
-            src="/test-vid.mov"
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="h-full w-full object-cover"
-          />
+          <WebcamVideo className="h-full w-full object-cover" />
         </div>
         <p
           className="mt-3 text-center text-lg font-semibold text-white"
@@ -336,4 +329,29 @@ function ActiveVoiceMode() {
       </div>
     </div>
   );
+}
+
+export function WebcamVideo({ className }: { className?: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    let stream: MediaStream | null = null;
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then((s) => {
+        stream = s;
+        if (videoRef.current) {
+          videoRef.current.srcObject = s;
+        }
+      })
+      .catch((err) => console.error("Webcam error:", err));
+
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+      }
+    };
+  }, []);
+
+  return <video ref={videoRef} autoPlay playsInline muted className={className} />;
 }

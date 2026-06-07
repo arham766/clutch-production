@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Orb } from "@/components/ui/orb";
 import { TiltedCard } from "./TiltedCard";
+import { WebcamVideo } from "@/app/test/[company_key]/LiveWidgetScene";
 
 type Msg = { sender: "user" | "ai"; text: string };
 
@@ -251,14 +252,7 @@ export function ChatScene() {
             boxShadow: "0 14px 36px rgba(50,72,93,0.22)",
           }}
         >
-          <video
-            src="/test-vid.mov"
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="h-full w-full object-cover"
-          />
+          <WebcamVideo className="h-full w-full object-cover" />
         </div>
         <p
           className="mt-3 text-center text-lg font-semibold text-white"

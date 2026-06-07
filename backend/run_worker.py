@@ -59,8 +59,8 @@ def main() -> int:
 
     # Explicit dispatch — auto-dispatch is flaky on LiveKit Cloud (Abdul's finding).
     # The /connection-details endpoint dispatches by this name.
-    worker_opts.agent_name = "clutch"
-    logger.info("Agent registered as agent_name='clutch' (explicit dispatch mode)")
+    # worker_opts.agent_name = "clutch"
+    logger.info("Agent registered (auto-dispatch mode)")
 
     logger.info(
         "Worker ready. Connecting to %s...",

@@ -1,9 +1,7 @@
 services:
-  # Backend Service
   - type: web
     name: clutch-backend
     env: python
-    rootDir: backend
     buildCommand: "./render-build.sh"
     startCommand: "uvicorn src.api.main:app --host 0.0.0.0 --port $PORT"
     envVars:
@@ -23,19 +21,4 @@ services:
       - key: FIREBASE_CLIENT_EMAIL
         sync: false
       - key: FIREBASE_PRIVATE_KEY
-        sync: false
-
-  # Frontend Service
-  - type: web
-    name: clutch-frontend
-    env: node
-    rootDir: frontend
-    buildCommand: "npm install && npm run build"
-    startCommand: "npm start"
-    envVars:
-      - key: NODE_VERSION
-        value: 20.18.0
-      - key: NEXT_PUBLIC_API_URL
-        # Set this manually in the Render dashboard to the backend's URL + /api
-        # Example: https://clutch-backend.onrender.com/api
         sync: false
